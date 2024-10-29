@@ -1,0 +1,122 @@
+
+<style>
+body {
+    background-color: #f7f7f7;
+}
+
+header .logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+footer {
+    background-color: #f3f3f3;
+    margin-top: 20px;
+}
+
+.card {
+    padding: 20px;
+}
+
+.card-title {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.quantity-selector select {
+    text-align: center;
+}
+
+.btn-dark {
+    background-color: #333;
+    color: #fff;
+}
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #393c49b0;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+<!-- Shopping Cart Section -->
+<main class="container my-5">
+    <h2 class="text-center mb-5">SHOPPING CART</h2>
+    <form action="/cart/checkout" method="post">
+        <div class="row">
+            <!-- Cart Items -->
+            <div class="col-md-8">
+                <table>
+                    <tr>
+                        <th>name</th>
+                        <th>price</th>
+                        <th>image</th>
+                        <th>quantity</th>
+                        <th>selection</th>
+                        <th></th>
+                    </tr>
+                    <% for( var i=0; i < cart.length; i++) { %>
+                        <tr>
+                            <td>
+                                <%= cart[i].name %>
+                            </td>
+                            <td>
+                                <%= cart[i].price %>
+                            </td>
+                            <td><img src="<%= cart[i].image %>" alt="error" style="height: 100px;"></td>
+                            <td>
+                                <%= cart[i].quantity %>
+                            </td>
+                            <td>
+                                <input 
+                                    type="checkbox" 
+                                    name="selectedItems" 
+                                    value="<%= cart[i]._id %>"
+                                    class="item-checkbox"
+                                >
+                            </td>
+                            <td>
+                                <a href="/cart/remove/<%= cart[i]._id %>" style="color: red; text-decoration: none;">remove</a>
+                                /
+                                <a href="/detail/<%= cart[i]._id %>">view</a>
+                            </td>
+                        </tr>
+                        <% } %>
+        
+                </table>
+            </div>
+        
+            <!-- Subtotal Section -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">SUBTOTAL (<%= cart.length %> ITEM)</h5>
+                        <p class="h4">$ <%= totals %>
+                        </p>
+                        <button type="submit" class="btn btn-dark btn-block mt-3">PROCEED TO CHECKOUT</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</main>
+<script>
+    document.querySelectorAll('.item-checkbox').forEach(checkbox => {
+        // Lấy trạng thái từ localStorage nếu có
+        checkbox.checked = localStorage.getItem(`selected_${checkbox.value}`) === 'true';
+
+        // Cập nhật localStorage khi checkbox thay đổi
+        checkbox.addEventListener('change', () => {
+            localStorage.setItem(`selected_${checkbox.value}`, checkbox.checked);
+        });
+    });
+</script>

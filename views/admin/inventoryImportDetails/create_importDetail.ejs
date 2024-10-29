@@ -1,0 +1,77 @@
+<div class="page-wrapper">
+    <div class="page-breadcrumb">
+        <div class="row align-items-center">
+            <div class="col-md-6 col-12 align-self-center">
+                <h3 class="page-title mb-0 p-0">Create import detail</h3>
+                <div class="d-flex align-items-center">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a
+                                    href="/admin/importDetail/getAllImportDetails?importId=<%=importIdQuery%>">Import
+                                    details</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Create import detail</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <div class="col-md-6 col-4 align-self-center">
+                <div class="text-end upgrade-btn">
+                    <a href="#" class="btn btn-danger d-none d-md-inline-block text-white" target="_blank">Upgrade to
+                        Pro</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+
+            <!-- body -->
+            <div class="col-lg-2 col-xlg-3 col-md-5">
+
+            </div>
+            <div class="col-lg-8 col-xlg-9 col-md-7">
+                <div class="card">
+                    <div class="card-body">
+                        <form action="/admin/importDetail/createImportDetail?importId=<%=importIdQuery%>" method="post"
+                            class="form-horizontal form-material mx-2">
+                            <div class="form-group">
+                                <label class="col-md-12 mb-0">importId</label>
+                                <div class="col-md-12">
+                                    <input name="orderId" type="string" class="form-control ps-0 form-control-line"
+                                        value="<%=importIdQuery%>" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-12">Select product</label>
+                                <div class="col-sm-12 border-bottom">
+                                    <select id="productSelect" name="productName"
+                                        class="form-select shadow-none ps-0 border-0 form-control-line">
+                                        <% for(var i=0; i < products.length; i++) { %>
+                                            <option value="<%= products[i].name %>"
+                                                data-quantity="<%= products[i].quantity %>">
+                                                <%= products[i].name %>
+                                            </option>
+                                        <% } %>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-12 mb-0">Quantity</label>
+                                <div class="col-md-12">
+                                    <input id="quantityInput" name="quantity" type="number" min="1" class="form-control ps-0 form-control-line">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-12 d-flex">
+                                    <button class="btn btn-success mx-auto mx-md-0 text-white">Create import detail</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

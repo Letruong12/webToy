@@ -1,0 +1,134 @@
+<div class="page-wrapper">
+    <div class="page-breadcrumb">
+        <div class="row align-items-center">
+            <div class="col-md-6 col-12 align-self-center">
+                <h3 class="page-title mb-0 p-0">dashboard</h3>
+                <div class="d-flex align-items-center">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">dashboard</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <div class="col-md-6 col-4 align-self-center">
+                <div class="text-end upgrade-btn">
+                    <a href="#" class="btn btn-danger d-none d-md-inline-block text-white" target="_blank">Upgrade to
+                        Pro</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <form action="/chartProduct" method="post" id="chartProduct">
+                <label for="thang">Tháng:</label>
+                <select name="thang" id="thang" required style="width: 70px; padding: 4px; border-radius: 20px;">
+                    <% const currentMonth=new Date().getMonth() + 1; %>
+                    <%for(var i = 1; i <= 12; i++) {%>
+                        <option value="<%=i%>" <%=currentMonth==i?'selected':''%>><%=i%></option>
+                    <%}%>
+                </select>
+                
+                
+                <label for="nam">Năm:</label>
+                <select name="nam" id="nam" required style="width: 100px; padding: 4px; border-radius: 20px;">
+                    <% for (let i=new Date().getFullYear(); i>= new Date().getFullYear() - 12; i--) { %>
+                        <option value="<%= i %>">
+                            <%= i %>
+                        </option>
+                    <% } %>
+                </select>
+                
+                <button type="submit" style="color: #696cff;
+                                            border-color: #696cff;
+                                            background: transparent;
+                                            outline: none;
+                                            padding: 4px 12px;
+                                            border-radius: 17px;
+                                            margin-left: 16px; ">
+                    Search
+                </button>
+            </form>
+            <!-- body -->
+            <div id="parentChart">
+                <canvas id="chartProductSold"></canvas>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/Chart/Chart.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#chartProduct').submit(function (event) {
+            event.preventDefault(); 
+            var formData = $(this).serialize(); 
+            $.ajax({
+                url: '/chartProduct', 
+                type: 'POST',
+                data: formData,
+                success: function (data) {
+                    console.log(data.productNames, data.totalQuantities);
+                    replaceChart();
+                    var ctx = document.getElementById('chartProductSold').getContext('2d');
+                    var barChartData = {
+                        labels: data.productNames,
+                        datasets: [{
+                            label: 'Products',
+                            borderWidth: 1,
+                            backgroundColor: '#66C732',
+                            data: data.totalQuantities
+                        }]
+                    };
+                    if (Math.min(...data.totalQuantities) > 0) {
+                        data.productNames.unshift(0);
+                        data.totalQuantities.unshift("0");
+                    }
+                    var myBarChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: barChartData
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+    function replaceChart() {
+        var canvas = document.getElementById('chartProductSold');
+        canvas.parentNode.removeChild(canvas); // Remove old canvas
+        var newCanvas = document.createElement('canvas');
+        newCanvas.id = 'chartProductSold';
+        var parent = document.getElementById('parentChart');
+        parent.appendChild(newCanvas);
+    }
+</script>
+<!-- <script>
+    fetch('/chartProduct')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.productNames, data.totalQuantities);
+            var ctx = document.getElementById('chartProductSold').getContext('2d');
+            var barChartData = {
+                labels: data.productNames,
+                datasets: [{
+                    label: data.productNames,
+                    borderWidth: 1,
+                    backgroundColor: '#66C732',
+                    data: data.totalQuantities
+                }]
+            };
+            if (Math.min(...data.totalQuantities) > 0) {
+                data.productNames.unshift(0);
+                data.totalQuantities.unshift("0"); // Thêm nhãn cho giá trị 0
+            }
+            var myBarChart = new Chart(ctx, {
+                type: 'bar',
+                data: barChartData
+            });
+        });
+</script> -->

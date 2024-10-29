@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/stylesheets/login_signup.css">
+    <link rel="stylesheet" href="/stylesheets/font/themify-icons/themify-icons.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="header">
+        <div class="nav-bar">
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Services</a>
+            <a href="#">contact</a>
+        </div>
+        <form action="#" class="search-bar">
+            <input type="text" class="search" placeholder="Search...">
+
+            <button type="submit"><i class="ti-search nav-search"></i></button>
+        </form>
+
+    </div>
+    <div class="background"></div>
+    <div class="container">
+        <div class="box1">
+            <h2 class="box1-code"><i class="ti-book"></i> Code</h2>
+            <h1>Welcome!</h1>
+            <h2>To Our New Website.</h2>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing edit. Beatea, asperiores.</p>
+            <div class="box1-icon">
+                <a href="#">
+                    <i class="ti-linkedin"></i>
+                </a>
+                <a href="#">
+                    <i class="ti-facebook"></i>
+                </a>
+                <a href="#">
+                    <i class="ti-instagram"></i>
+                </a>
+                <a href="#">
+                    <i class="ti-twitter-alt"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- form Sign up -->
+        <form action="/signup" class="box2 login">
+            <h3>Sign up</h3>
+            <div class="login-box">
+                <i class="ti-user text-white icon-login"></i>
+                <input placeholder=" " class="input-login" type="text" name="name">
+                <label for="" class="text-white lb-login">Name</label>
+            </div>
+            <div class="login-box">
+                <i class="ti-email text-white icon-login"></i>
+                <input placeholder=" " class="input-login" type="email" name="email">
+                <label for="" class="text-white lb-login">Email</label>
+            </div>
+            <div class="login-box">
+                <i class="ti-timer text-white icon-login"></i>
+                <input placeholder=" " class="input-login" type="number" name="age">
+                <label for="" class="text-white lb-login">Age</label>
+            </div>
+            <div class="login-box">
+                <i class="ti-lock text-white icon-login"></i>
+                <input placeholder=" " class="input-login" type="password" name="password">
+                <label for="" class="text-white lb-login">Password</label>
+            </div>
+            <div class="login-box">
+                <i class="ti-lock text-white icon-login"></i>
+                <input placeholder=" " class="input-login" type="password" name="confirmPassword">
+                <label for="" class="text-white lb-login">confirmPassword</label>
+            </div>
+            <div class="rem-forgot">
+                <div class="remember">
+                    <input type="checkbox" class="input-checkbox" id="remember-signup">
+                    <label for="remember-signup" class="text-white">remember me</label>
+                </div>
+                <a href="#" class="forgot">Forgot password?</a>
+            </div>
+            <input type="text" value="normal" style="display: none;" name="key_role">
+            <button class="text-white">Sign up</button>
+            <p>Already have an account? <a style="cursor: pointer;" class="sign-in-link">Sign in</a></p>
+        </form>
+
+        <!-- form sign in -->
+        <form action="/login" method="post" class="box2 register active">
+            <h3>Sign in</h3>
+            <div class="login-box">
+                <i class="ti-email text-white icon-login"></i>
+                <input placeholder=" " class="input-login" type="email" name="email">
+                <label for="" class="text-white lb-login">Email</label>
+            </div>
+            <div class="login-box">
+                <i class="ti-lock text-white icon-login"></i>
+                <input placeholder=" " class="input-login" type="password" name="password">
+                <label for="" class="text-white lb-login">Password</label>
+            </div>
+            <div class="rem-forgot">
+                <div class="remember">
+                    <input type="checkbox" class="input-checkbox" id="remember-login">
+                    <label for="remember-login" class="text-white">remember me</label>
+                </div>
+                <a href="#" class="forgot">Forgot password?</a>
+            </div>
+            <input type="text" value="normal" style="display: none;" name="key_role">
+            <button class="text-white">Sign in</button>
+            <p>Don't have an account? <a style="cursor: pointer;" class="sign-up-link">Sign up</a></p>
+        </form>
+    </div>
+
+    <!-- Thêm vào cuối body của file login.ejs -->
+    <div class="success-notification hidden" id="successNotification">
+        <i class="ti-check"></i> <!-- Icon dấu check -->
+        <span>Cảm ơn bạn đã đăng ký!</span>
+        <button onclick="hideNotification_c()">×</button>
+    </div>
+    <div class="fail-notification hidden" id="failNotification">
+        <i class="ti-check"></i> <!-- Icon dấu check -->
+        <span>Cảm ơn bạn đã đăng ký!</span>
+        <button onclick="hideNotification_f()">×</button>
+    </div>
+    <script>
+        function hideNotification_c() {
+            const notification = document.getElementById('successNotification');
+            notification.classList.add('hidden'); // Ẩn thông báo khi nhấn nút ×
+        }
+        function hideNotification_f() {
+            const notification = document.getElementById('failNotification');
+            notification.classList.add('hidden'); // Ẩn thông báo khi nhấn nút ×
+        }
+    </script>
+    <script src="/javascripts/login_signup.js"></script>
+
+</body>
+
+</html>

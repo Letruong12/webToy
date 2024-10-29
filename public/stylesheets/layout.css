@@ -1,0 +1,158 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f7f7f7;
+}
+
+header {
+    background-color: #333;
+    padding: 10px 20px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.search-bar {
+    display: flex;
+    gap: 5px;
+}
+
+.search-bar input {
+    padding: 5px;
+}
+
+.search-bar button {
+    padding: 5px 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.nav-links a {
+    color: white;
+    margin-left: 20px;
+    text-decoration: none;
+}
+
+.go-back {
+    display: block;
+    margin: 20px;
+    color: #333;
+    text-decoration: none;
+}
+
+.product-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.product-image img {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 5px;
+}
+
+.product-details {
+    max-width: 400px;
+}
+
+.product-details h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.rating {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.rating span {
+    color: gold;
+}
+
+.price {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.description {
+    margin-bottom: 20px;
+}
+
+.purchase-info {
+    background-color: #f3f3f3;
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+}
+
+.purchase-info p {
+    margin: 5px 0;
+}
+
+.purchase-info button {
+    padding: 10px;
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: not-allowed;
+}
+
+.reviews,
+.review-form {
+    margin: 20px;
+    max-width: 800px;
+}
+
+.reviews h2,
+.review-form h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.review-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.review-form label {
+    font-weight: bold;
+}
+
+.review-form select,
+.review-form textarea {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.review-form button {
+    padding: 10px;
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #f3f3f3;
+    margin-top: 20px;
+}

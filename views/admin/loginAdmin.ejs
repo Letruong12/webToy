@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html dir="ltr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>login</title>
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png" />
+    <!-- Custom CSS -->
+    <link href="/stylesheets/style.css" rel="stylesheet" />
+    
+</head>
+
+<body>
+    <div class="main-wrapper">
+        <div
+            class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
+            <div class="d-flex align-items-center justify-content-center w-100">
+                <div class="row justify-content-center w-100">
+                    <div class="col-md-8 col-lg-3 auth-card">
+                        <div class="card mb-0">
+                            <div class="card-body">
+                                <a href="#" style="background: #2B2B2B; border-radius: 12px;"
+                                    class="text-nowrap logo-img text-center d-block py-3 w-100">
+                                    <b class="logo-icon">
+                                        <img src="/images/logo-light-icon.png" alt="homepage"
+                                            class="dark-logo" />
+
+                                    </b>
+                                    <span class="logo-text">
+                                        <img src="/images/logo-light-text.png" alt="homepage"
+                                            class="dark-logo" />
+
+                                    </span>
+                                </a>
+                                <p class="text-center font-14">Your Social Campaigns</p>
+                                <form action="/adminLogin" method="post">
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label">Email</label>
+                                        <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="exampleInputPassword1" class="form-label">Password</label>
+                                        <input name="password" type="password" class="form-control" id="exampleInputPassword1">
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between mb-4">
+                                        <div class="form-check mb-0">
+                                            <input class="form-check-input info" type="checkbox" value=""
+                                                id="flexCheckChecked">
+                                            <label class="form-check-label text-dark mb-0" for="flexCheckChecked">
+                                                Remeber this Device
+                                            </label>
+                                        </div>
+                                        <a class="text-info font-14" href="#">Forgot Password ?</a>
+                                    </div>
+                                    <input type="text" value="admin" style="display: none;" name="key_role">
+                                    <button href="#" class="btn btn-info w-100 py-8 mb-4 font-14">Sign In</button>
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <p class="mb-0">You are client</p>
+                                        <a class="text-info ms-2 font-14" href="/auth">client login</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="success-notification hidden" id="successNotification">
+        <i class="ti-check"></i> <!-- Icon dấu check -->
+        <span>bạn đã đăng xuất thành công</span>
+        <button onclick="hideNotification_c()">×</button>
+    </div>
+    <style>
+        .success-notification {
+            display: block;
+            background-color: #4caf50;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            position: absolute;
+            top: 104px;
+            right: 30px;
+            width: 240px;
+        }
+    
+        .hidden {
+            display: none;
+        }
+    
+        .success-notification button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            position: absolute;
+            top: 9px;
+            right: 4px;
+        }
+    </style>
+    <script>
+        function showNotification_C(message) {
+            const notification = document.getElementById('successNotification');
+            notification.querySelector('span').textContent = message; // Đặt thông điệp
+            notification.classList.remove('hidden');
+
+            // Ẩn thông báo sau 6 giây (6000ms)
+            setTimeout(() => {
+                notification.classList.add('hidden');
+            }, 6000);
+        }
+        function hideNotification_c() {
+            const notification = document.getElementById('successNotification');
+            notification.classList.add('hidden'); // Ẩn thông báo khi nhấn nút ×
+        }
+        function checkLogoutMessage() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const message = urlParams.get('message');
+            console.log('check');
+            if (message === 'success') {
+                showNotification_C('Đã đăng xuất thành công!');
+            }
+        }
+
+        // Gọi hàm này khi trang login load
+        window.onload = checkLogoutMessage;
+    </script>
+    <script src="/plugins/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="/plugins/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

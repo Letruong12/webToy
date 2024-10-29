@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/stylesheets/layout.css">
+    <link rel="stylesheet" href="/plugins/bootstrap/css/bootstrap.css">
+</head>
+
+<body>
+    <header class="bg-dark text-white py-3">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div class="logo h3">
+                <a href="/dashboard" style="text-decoration: none;color: aliceblue;">PROSHOP</a>
+            </div>
+            <div class="search-bar d-flex">
+                <input type="text" class="form-control mr-2" placeholder="Search Products...">
+                <button class="btn btn-success">SEARCH</button>
+            </div>
+            <div class="nav-links">
+                <a href="/cart" class="text-white mr-3" style="text-decoration: none;">CART</a>
+                <a href="/profile" class="text-white mr-3" style="text-decoration: none;">PROFILE</a>
+                <a href="/logout" class="text-white mr-3" style="text-decoration: none;">LOGOUT</a>
+            </div>
+        </div>
+    </header>
+    <%- include(body) %>
+    
+</body>
+</html>

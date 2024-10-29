@@ -1,0 +1,94 @@
+<div class="page-wrapper">
+    <div class="page-breadcrumb">
+        <div class="row align-items-center">
+            <div class="col-md-6 col-12 align-self-center">
+                <h3 class="page-title mb-0 p-0">Update order detail</h3>
+                <div class="d-flex align-items-center">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a
+                                    href="/admin/orderDetail/getAllOrderDetails?orderId=<%=orderIdParams%>">Order
+                                    details</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Update order detail</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <div class="col-md-6 col-4 align-self-center">
+                <div class="text-end upgrade-btn">
+                    <a href="#" class="btn btn-danger d-none d-md-inline-block text-white" target="_blank">Upgrade to
+                        Pro</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+
+            <!-- body -->
+            <div class="col-lg-2 col-xlg-3 col-md-5">
+
+            </div>
+            <div class="col-lg-8 col-xlg-9 col-md-7">
+                <div class="card">
+                    <div class="card-body">
+                        <form action="/admin/orderDetail/updateOrderDetail/<%=orderDetail._id%>" method="post"
+                            class="form-horizontal form-material mx-2">
+                            <div class="form-group">
+                                <label class="col-md-12 mb-0">orderId</label>
+                                <div class="col-md-12">
+                                    <input name="orderId" type="string" class="form-control ps-0 form-control-line"
+                                        value="<%=orderIdParams%>" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-12">Select product</label>
+                                <div class="col-sm-12 border-bottom">
+                                    <select id="productSelect" name="productName"
+                                        class="form-select shadow-none ps-0 border-0 form-control-line">
+                                        <% for(var i=0; i < products.length; i++) { %>
+                                            <option value="<%= products[i].name %>"
+                                                data-quantity="<%= products[i].quantity %>" <%=orderDetail.productId.name==products[i].name?'selected':''%>>
+                                                <%= products[i].name %>
+                                            </option>
+                                        <% } %>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-12 mb-0">Quantity</label>
+                                <div class="col-md-12">
+                                    <input id="quantityInput" name="quantity" type="number" min="1"
+                                        max="<%=orderDetail.productId.quantity + orderDetail.quantity%>" value="<%=orderDetail.quantity%>" class="form-control ps-0 form-control-line">
+                                </div>
+                            </div>
+                            <input name="odId" type="text" style="display: none;" value="<%=orderDetail._id%>">
+                            <input id="nameOd" type="text" style="display: none;" value="<%=orderDetail.productId.name%>">
+                            <div class="form-group">
+                                <div class="col-sm-12 d-flex">
+                                    <button class="btn btn-success mx-auto mx-md-0 text-white">Update order</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById('productSelect').addEventListener('change', function () {
+        var selectedOption = this.options[this.selectedIndex];
+        var maxQuantity = parseInt(selectedOption.getAttribute('data-quantity'), 10);
+        var valueCurrent = parseInt(document.getElementById('quantityInput').value, 10);
+        var nameSelect = selectedOption.value;
+        var nameOd = document.getElementById('nameOd').value;
+        if( nameSelect == nameOd ){
+            document.getElementById('quantityInput').setAttribute('max', maxQuantity + valueCurrent);
+        }
+        else{
+            document.getElementById('quantityInput').setAttribute('max', maxQuantity);
+        }
+    });
+</script>

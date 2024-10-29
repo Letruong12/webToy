@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Chat</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        #chat {
+            width: 100%;
+            height: 550px;
+            display: flex;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            flex-direction: column;
+        }
+
+        .chatForm {
+            display: flex;
+            flex-direction: column;
+            background-color: #f6f6f6;
+            width: 400px;
+            height: 600px;
+            border: 8px solid #a4a4a4;
+            border-radius: 8px;
+        }
+
+        .messageForm {
+            width: 100%;
+            display: flex;
+        }
+
+        #message {
+            flex-grow: 1;
+            height: 48px;
+            font-size: 16px;
+            border: none;
+            outline: none;
+            padding: 0 12px;
+            background-color: #fff;
+        }
+
+        #sendBtn {
+            height: 48px;
+            font-size: 16px;
+            border: none;
+            padding: 0px 20px;
+            outline: none;
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        #clientList {
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            padding: 5px;
+            width: 230px;
+            border: 2px solid #4a4a4a;
+            border-radius: 12px;
+            background-color: #f6f6f6;
+        }
+
+        .clientItem {
+            cursor: pointer;
+            padding: 8px 16px;
+            margin: 4px 0;
+            border-bottom: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 2px 2px 2px #ddd;
+        }
+
+        .clientItem:hover {
+            background-color: #eee;
+        }
+
+        .side-message {
+            padding: 8px 12px;
+            margin: 12px;
+            max-width: 250px;
+            font-size: 18px;
+            word-wrap: break-word;
+            position: relative;
+            margin-top: 30px;
+        }
+
+        .right {
+            border-radius: 20px 20px 0px 20px;
+            align-self: flex-end;
+            background-color: #2d2d2d;
+            box-shadow: 2px 2px 4px #dcdcdc;
+            color: #f6f6f6;
+        }
+
+        .left {
+            border-radius: 20px 20px 20px 0px;
+            align-self: flex-start;
+            background-color: #fff;
+            box-shadow: -2px 2px 4px #dcdcdc;
+        }
+
+        .side-title {
+            font-size: 12px;
+        }
+
+        .right .side-title {
+            position: absolute;
+            top: -18px;
+            right: 14px;
+            color: #2d2d2d;
+        }
+
+        .left .side-title {
+            position: absolute;
+            top: -18px;
+            left: 14px;
+            color: #2d2d2d;
+        }
+
+        .v-divider {
+            height: 48px;
+            width: 2px;
+            background-color: #f6f6f6;
+        }
+        .newMessageAlert {
+            background-color: yellow; /* Hoặc bất kỳ màu nào bạn muốn */
+            font-weight: bold;
+        }
+        .selectedMess {
+            background-color: #dcdcdc;
+        }
+        .containerChat {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: space-evenly;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <h1>Admin Chat</h1>
+                <div class="containerChat">
+                    <div id="clientList"></div> <!-- Danh sách client -->
+                    <div class="chatForm">
+                        <div id="chat"></div>
+                        <div class="messageForm">
+                            <input type="text" id="message" placeholder="Nhập tin nhắn...">
+                            <div class="v-divider"></div>
+                            <button id="sendBtn">Gửi</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        let selectedClient = null;
+
+        const chat = document.getElementById('chat');
+        const messageInput = document.getElementById('message');
+        const sendBtn = document.getElementById('sendBtn');
+        const clientList = document.getElementById('clientList');
+
+        // Nhận danh sách các client
+        socket.on('clientList', (clients) => {
+            clientList.innerHTML = ''; // Xóa danh sách cũ
+            Object.keys(clients).forEach(key => {
+                const clientDiv = document.createElement('div');
+                clientDiv.textContent = clients[key].userName;
+                clientDiv.dataset.value = key;
+                clientDiv.classList.add('clientItem');
+                clientDiv.onclick = () => viewClientHistory(clients[key]); // Chọn client khi nhấn vào
+                clientList.appendChild(clientDiv);
+            })
+        });
+
+        // khi admin nhấn vào client để xem lichj sử đoạn chat
+        function viewClientHistory(client) {
+            selectedClient = client.userId;
+            socket.emit('getChatHistory', client.userId); 
+            const clientDivs = document.getElementsByClassName('clientItem');
+            for (let div of clientDivs) {
+                if (div.dataset.value == client.userId) {
+                    div.classList.remove('newMessageAlert');
+                    div.classList.add('selectedMess');
+                }
+                else{
+                    div.classList.remove('selectedMess');
+                }
+            }
+        }
+
+        socket.emit('registerAdmin');
+
+        socket.on('chatHistory', (history) => {
+            const chatBox = document.getElementById('chat');
+            chatBox.innerHTML = ''; // Xóa nội dung chat cũ
+            history.forEach(message => {
+                append(message.user, message.text, message.user === 'Admin' ? 'right' : 'left');
+            });
+        });
+
+        // Nhận tin nhắn từ client
+        socket.on('newMessage', (message) => {
+            if( (selectedClient) == message.userId ){
+                append(message.user, message.text, 'left');
+            }
+            else{
+                const clientDivs = document.getElementsByClassName('clientItem');
+                for (let div of clientDivs) {
+                    if (div.dataset.value == message.userId) {
+                        div.classList.add('newMessageAlert');
+                    }
+                } 
+            }
+        });
+
+        // Gửi tin nhắn đến client được chọn
+        sendBtn.addEventListener('click', () => {
+            const message = messageInput.value;
+            if (message && selectedClient) {
+                socket.emit('adminPrivateMessage', { toClient: selectedClient, message });
+                append('Admin', message, 'right');
+                messageInput.value = '';
+            }
+        });
+
+        function append(user, message, side) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('side-message');
+            messageDiv.classList.add(`${side}`);
+            const title = document.createElement('div');
+            title.classList.add('side-title');
+            title.textContent = `${user}`;
+            const content = document.createElement('span');
+            content.classList.add('side-content');
+            content.textContent = `${message}`;
+            messageDiv.appendChild(title);
+            messageDiv.appendChild(content);
+            chat.appendChild(messageDiv);
+        }
+    </script>
+</body>
+
+</html>

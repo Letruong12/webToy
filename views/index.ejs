@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style_test.css' />
+  </head>
+  <h2>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+    <ul>
+      <% for(var i=0; i < lst.length; i++) { %>
+        <li>
+          <%= lst[i] %>
+        </li>
+      <% } %>
+    </ul>
+    <% var y='<h2 style="color: red;">hello world</h2>' ; %>
+    <%- y %>
+    <img src="/images/bg-93.jpg" alt="Background Image" />
+  </body>
+</html>

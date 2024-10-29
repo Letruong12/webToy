@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Chat</title>
+    <style>
+        .chatForm {
+            display: flex;
+            flex-direction: column;
+            background-color: #f6f6f6;
+            width: 400px;
+            height: 600px;
+            border: 8px solid #a4a4a4;
+            border-radius: 8px;
+            position: absolute;
+            bottom: 84px;
+            right: 40px;
+            transition: all 0.5s linear;
+            z-index: 3;
+        }
+
+        #chat {
+            width: 100%;
+            height: 550px;
+            display: flex;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            flex-direction: column;
+        }
+
+        .messageForm {
+            width: 100%;
+            display: flex;
+        }
+
+        #message {
+            flex-grow: 1;
+            height: 48px;
+            font-size: 16px;
+            border: none;
+            outline: none;
+            padding: 0 12px;
+            background-color: #fff;
+        }
+
+        #sendBtn {
+            height: 48px;
+            font-size: 16px;
+            border: none;
+            padding: 0px 20px;
+            outline: none;
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        .side-message {
+            padding: 8px 12px;
+            margin: 12px;
+            max-width: 250px;
+            font-size: 18px;
+            word-wrap: break-word;
+            position: relative;
+            margin-top: 30px;
+        }
+
+        .right {
+            border-radius: 20px 20px 0px 20px;
+            align-self: flex-end;
+            background-color: #2d2d2d;
+            box-shadow: 2px 2px 4px #dcdcdc;
+            color: #f6f6f6;
+        }
+
+        .left {
+            border-radius: 20px 20px 20px 0px;
+            align-self: flex-start;
+            background-color: #fff;
+            box-shadow: -2px 2px 4px #dcdcdc;
+        }
+
+        .side-title {
+            font-size: 12px;
+        }
+
+        .right .side-title {
+            position: absolute;
+            top: -18px;
+            right: 14px;
+            color: #2d2d2d;
+        }
+
+        .left .side-title {
+            position: absolute;
+            top: -18px;
+            left: 14px;
+            color: #2d2d2d;
+        }
+
+        .v-divider {
+            height: 48px;
+            width: 2px;
+            background-color: #f6f6f6;
+        }
+
+        .chatButton {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: #00eaff;
+            border-radius: 50%;
+            transition: all 0.5s linear;
+            z-index: 3;
+        }
+
+        .hidden {
+            display: none;
+        }
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .latest-products h2 {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .card .price {
+            color: #333;
+        }
+
+        .carousel-caption {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .card-img {
+            width: 100%;
+            height: 350px;
+        }
+        .link-a {
+            text-decoration: none;
+            color: #2d2d2d;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container my-4">   
+    
+        <!-- Latest Products Section -->
+        <section class="latest-products">
+            <h2 class="mb-4">LATEST PRODUCTS</h2>
+            <div class="row">
+                <!-- Product Card -->
+                <% for(var i = 0; i < products.length; i++) { %>
+                    <div class="col-md-4 col-lg-3 mb-4">
+                        <div class="card">
+                            <a href="/detail/<%= products[i]._id %>">
+                                <img src="<%= products[i].image %>" class="card-img-top card-img" alt="Airpods">
+                            </a>
+                            <div class="card-body text-center">
+                                <h5 class="card-title">
+                                    <a href="/detail/<%= products[i]._id %>" class="link-a"><%= products[i].name %></a>
+                                </h5>
+                                <div class="rating mb-2">
+                                    <span class="ml-2">0 reviews</span>
+                                </div>
+                                <p class="price h5">$ <%= products[i].price %></p>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+                
+                <!-- Add more product cards similarly -->
+            </div>
+        </section>
+    </main>
+    <div class="chatButton"></div>
+    <div class="chatForm hidden">
+        <div id="chat"></div>
+        <div class="messageForm">
+            <input type="text" id="message" placeholder="Nhập tin nhắn...">
+            <div class="v-divider"></div>
+            <button id="sendBtn">Gửi</button>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        window.userData = {
+            userId: '<%= user._id %>',
+            userName: '<%= user.name%>'
+        };
+    </script>
+    
+    <script>
+        console.log('User ID:', window.userData.userId);
+        console.log('User Name:', window.userData.userName);
+    </script>
+    <script>
+        const socket = io();
+        const chat = document.getElementById('chat');
+        const messageInput = document.getElementById('message');
+        const sendBtn = document.getElementById('sendBtn');
+        const chatButton = document.querySelector('.chatButton');
+        const chatForm = document.querySelector('.chatForm');
+
+        chatButton.addEventListener('click', () => {
+            chatForm.classList.toggle('hidden');
+            if (chatForm.classList.contains('hidden')) {
+                chatButton.style.backgroundColor = '#ce208b';
+            } else {
+                chatButton.style.backgroundColor = '#00eaff';
+            }
+        })
+        // Đăng ký tên người dùng (username) ngay khi kết nối
+        // const username = prompt("Nhập tên của bạn:");
+        socket.emit('registerClient', window.userData.userId);
+
+        // lấy lịch sử đoạn chat
+        socket.emit('getChatHistory', window.userData.userId);
+        socket.on('chatHistory', (history) => {
+            chat.innerHTML = '';
+            history.forEach(message => {
+                append(message.user, message.text, message.user === 'Admin' ? 'left' : 'right');
+            });
+        });
+        // Nhận tất cả tin nhắn từ server
+        socket.on('newMessage', (message) => {
+            append(message.user, message.text, 'left')
+        });
+        // Gửi tin nhắn từ client
+        sendBtn.addEventListener('click', () => {
+            const message = messageInput.value;
+            if (message) {
+                socket.emit('clientMessage', message, window.userData.userId);
+                messageInput.value = '';
+                append(window.userData.userName, message, 'right')
+            }
+        });
+        function append(user, message, side) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('side-message');
+            messageDiv.classList.add(`${side}`);
+            // Tạo phần tử p cho tiêu đề
+            const title = document.createElement('div');
+            title.classList.add('side-title');
+            title.textContent = `${user}`;
+            // Tạo phần tử p cho nội dung
+            const content = document.createElement('span');
+            content.classList.add('side-content');
+            content.textContent = `${message}`;
+            // Thêm tiêu đề và nội dung vào div
+            messageDiv.appendChild(title);
+            messageDiv.appendChild(content);
+            // Thêm div vào hộp chat
+            const chat = document.getElementById('chat');
+            chat.appendChild(messageDiv);
+        }
+    </script>
+</body>
+
+</html>

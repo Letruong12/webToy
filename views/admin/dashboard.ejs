@@ -1,0 +1,66 @@
+
+<div class="page-wrapper">
+    <div class="page-breadcrumb">
+        <div class="row align-items-center">
+            <div class="col-md-6 col-12 align-self-center">
+                <h3 class="page-title mb-0 p-0">dashboard</h3>
+                <div class="d-flex align-items-center">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">dashboard</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <div class="col-md-6 col-4 align-self-center">
+                <div class="text-end upgrade-btn">
+                    <a href="#" class="btn btn-danger d-none d-md-inline-block text-white" target="_blank">Upgrade to
+                        Pro</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+
+            <!-- body -->
+            <div>dashboard</div>
+            <div>
+                <canvas id="chartProduct"></canvas>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="/Chart/Chart.min.js"></script>
+<script>
+    fetch('/chart') 
+        .then(response => response.json())
+        .then(data => {
+            var ctx = document.getElementById('chartProduct').getContext('2d');
+            var barChartData = {
+                labels: data.labels,
+                datasets: [{
+                    label: 'Tổng tiền nhập',
+                    borderWidth: 1,
+                    backgroundColor: '#66C732',
+                    data: data.totalImportData
+                },{
+                    label: 'Tổng tiền xuất',
+                    borderWidth: 1,
+                    backgroundColor: '#FFC107',
+                    data: data.totalOrderData
+                }]
+            };
+            if (Math.min(...data.totalImportData) > 0 || Math.min(...data.totalOrderData) > 0) {
+                data.importData.unshift(0);
+                data.labels.unshift("0"); // Thêm nhãn cho giá trị 0
+            }
+            var myBarChart = new Chart(ctx, {
+                type: 'bar',
+                data: barChartData
+            });
+        });
+</script>

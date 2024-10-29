@@ -1,0 +1,392 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #020410;
+    min-height: 100vh;
+    position: relative;
+}
+
+::selection {
+    background-color: #555;
+}
+
+:root {
+    --bkg: url(../images/img-3.jpg);
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    /*	background: #a36dbf;*/
+    padding: 20px calc((100% - 60%) / 2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+}
+
+.nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-bar a {
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    color: #fff;
+    position: relative;
+    margin: 0 20px;
+}
+
+.nav-bar a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #fff;
+    border-radius: 5px;
+    bottom: -5px;
+    transform: translateY(10px);
+    transition: .5s ease;
+    opacity: 0;
+}
+
+.nav-bar a:hover::after {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.header .search-bar {
+    width: 250px;
+    height: 35px;
+    border: 1px solid #fff;
+    border-radius: 3px;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+}
+
+.search-bar input {
+    padding: 0 10px;
+    background-color: transparent;
+    width: 100%;
+    outline: none;
+    border: none;
+    font-size: 16px;
+    color: #fff;
+    font-weight: 500;
+}
+
+.search-bar input::placeholder {
+    color: #fff;
+}
+
+.search-bar button {
+    width: 40px;
+    height: 100%;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-bar button i {
+    font-size: 16px;
+    color: #fff;
+    font-weight: 500;
+}
+
+.search-bar .nav-search {
+    cursor: pointer;
+}
+
+.background {
+    width: 100%;
+    height: 100vh;
+    background: var(--bkg) no-repeat;
+    background-size: cover;
+    background-position: center;
+    filter: blur(10px);
+}
+
+.container {
+    position: absolute;
+    width: 60%;
+    height: 600px;
+    background: var(--bkg) no-repeat;
+    background-size: cover;
+    background-position: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin-top: 30px;
+    overflow: hidden;
+}
+
+.container .box1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60%;
+    height: 100%;
+    padding: 55px 65px 55px 55px;
+}
+
+.container .box1 h2 {
+    font-size: 30px;
+    color: #fff;
+    font-weight: 600;
+}
+
+.container .box1 .box1-code {
+    margin-bottom: 50px;
+}
+
+.container .box1 h1 {
+    font-size: 36px;
+    color: #fff;
+    font-weight: 800;
+}
+
+.container .box1 p {
+    font-size: 16px;
+    color: #fff;
+}
+
+.container .box1 .box1-icon {
+    margin-top: 15px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.container .box1 .box1-icon a {
+    font-size: 16px;
+    color: #fff;
+    cursor: pointer;
+    margin-right: 10px;
+    text-decoration: none;
+    display: inline-block;
+    width: 20px;
+}
+
+.container .box1 .box1-icon a:hover i {
+    font-size: 22px;
+}
+
+.container .box2 {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40%;
+    height: 100%;
+    backdrop-filter: blur(15px);
+    padding: 20px;
+}
+
+.container .box2 h3 {
+    text-align: center;
+    font-size: 24px;
+    color: #FFF;
+    font-weight: 600;
+    margin: 20px 0 40px 0;
+}
+
+.container .box2 .login-box {
+    position: relative;
+    background-color: transparent;
+    width: 100%;
+    margin: 20px 0;
+    border-bottom: 2px solid #fff;
+    border-radius: 1px;
+}
+
+.container .box2 .input-login {
+    width: 100%;
+    padding: 15px 35px 10px 0;
+    outline: none;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    background-color: transparent;
+}
+
+.container .box2 .text-white {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.box2 .login-box .lb-login {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    transition: .5s ease;
+    pointer-events: none;
+}
+
+.box2 .login-box .icon-login {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 8px;
+    cursor: pointer;
+}
+
+.box2 .login-box .input-login:not(:placeholder-shown)+.lb-login,
+.box2 .login-box .input-login:focus+.lb-login {
+    top: 0;
+}
+
+.box2 .rem-forgot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.box2 .rem-forgot .input-checkbox {
+    accent-color: #fff;
+    margin-right: 3px;
+}
+
+.box2 .rem-forgot .remember label {
+    cursor: pointer;
+}
+
+.box2 .rem-forgot .forgot {
+    font-size: 16px;
+    font-weight: 500;
+    color: #fff;
+    text-decoration: none;
+}
+
+.box2 .rem-forgot .forgot:hover {
+    text-decoration: underline;
+}
+
+.box2 button {
+    width: 100%;
+    background-color: #ff4c00;
+    border: none;
+    border-radius: 3px;
+    padding: 12px;
+    margin: 15px 0 10px 0;
+    cursor: pointer;
+}
+
+.box2 button:hover {
+    background-color: #ff6d00;
+}
+
+.box2 p {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 300;
+    text-align: center;
+}
+
+.box2 p a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 500;
+}
+
+.box2 p a:hover {
+    text-decoration: underline;
+}
+
+.box2.login.active {
+    transform: translateX(0);
+    transition: transform 0.7s ease;
+}
+
+.box2.login {
+    transform: translateX(100%);
+    transition: transform 0.6s ease;
+}
+
+.box2.register {
+    transform: translateX(100%);
+    transition: transform 0.6s ease;
+}
+
+.box2.register.active {
+    transform: translateX(0);
+    transition: transform 0.7s ease;
+}
+
+/* notification */
+/* Thêm vào file CSS của bạn (login_signup.css) */
+.success-notification {
+    position: absolute;
+    top: 80px;
+    right: 20px;
+    background-color: #28a745;
+    /* Màu nền thành công (xanh lá cây) */
+    color: white;
+    padding: 15px 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    z-index: 1000;
+    /* Đảm bảo nó ở trên các phần tử khác */
+}
+
+.success-notification i {
+    margin-right: 10px;
+}
+
+.success-notification button {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.fail-notification {
+    position: absolute;
+    top: 140px;
+    right: 20px;
+    background-color: #cf364a;
+    /* Màu nền thành công (xanh lá cây) */
+    color: white;
+    padding: 15px 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    z-index: 1000;
+    /* Đảm bảo nó ở trên các phần tử khác */
+}
+
+.fail-notification i {
+    margin-right: 10px;
+}
+
+.fail-notification button {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.hidden {
+    display: none;
+}

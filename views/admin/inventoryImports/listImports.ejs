@@ -1,0 +1,228 @@
+<div class="page-wrapper">
+    <div class="page-breadcrumb">
+        <div class="row align-items-center">
+            <div class="col-md-6 col-12 align-self-center">
+                <h3 class="page-title mb-0 p-0">Table mports</h3>
+                <div class="d-flex align-items-center">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Table mports</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <div class="col-md-6 col-4 align-self-center">
+                <div class="text-end upgrade-btn">
+                    <a href="#" class="btn btn-danger d-none d-md-inline-block text-white" target="_blank">Upgrade to
+                        Pro</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+
+            <!-- body -->
+            <h1>
+                <a style="color: #3E5569;" href="/admin/import/getAllImports">
+                    <%= title %>
+                </a>
+            </h1>
+
+            <% if (statusMessage==='success' ) { %>
+                <div class="success-notification" id="successNotification">
+                    <i class="mdi me-2 mdi-check"></i>
+                    <span>Tạo import thành công!</span>
+                    <button onclick="hideNotification_c()"><i class="mdi me-2 mdi-close-circle-outline"></i></button>
+                </div>
+            <% } %>
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Basic Table</h4>
+                        <h6 class="card-subtitle">+ <a href="/admin/import/createImport"> Add import</a>
+                        <h6>
+                        <div class="table-responsive">
+                            <table class="table user-table">
+                                <thead>
+                                    <tr>
+                                        <th class="border-top-0">#</th>
+                                        <th class="border-top-0">Status</th>
+                                        <th class="border-top-0">Ispaid</th>
+                                        <th class="border-top-0">ProviderName</th>
+                                        <th class="border-top-0">totals</th>
+                                        <th class="border-top-0"></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% for(var i=0; i < imports.length; i++) { %>
+                                        <tr>
+                                            <td>
+                                                <%= i+1 %>
+                                            </td>
+                                            <td>
+                                                <%= imports[i].status %>
+                                            </td>
+                                            <td>
+                                                <%= imports[i].isPaid %>
+                                            </td>
+                                            <td>
+                                                <%= imports[i].providerId.name %>
+                                            </td>
+                                            <td>
+                                                <%= imports[i].totalAmount %>
+                                            </td>
+                                            <td>
+                                                <a
+                                                    href="/admin/import/updateImport/<%= imports[i]._id %>">update</a>
+                                                |
+                                                <a style="cursor: pointer; color: #C42B1C;"
+                                                    onclick="showConfirmBox('<%=i+1%>')">delete</a> |
+                                                <a style="color: #00A35C;"
+                                                    href="/admin/importDetail/getAllImportDetails?importId=<%=imports[i]._id %>">import
+                                                    detail</a>
+                                                <div class="overlay" id="overlay"></div>
+                                                <div class="overlay" id="overlay-<%= i+1 %>"
+                                                    style="display: none;"></div>
+                                                <div class="confirm-box" id="confirmBox-<%= i+1 %>"
+                                                    style="display: none;">
+                                                    <p>Bạn có muốn xóa import không?</p>
+                                                    <p>importId: <%= imports[i]._id %>
+                                                    </p>
+                                                    <p>importStatus: <%= imports[i].status %>
+                                                    </p>
+                                                    <p>importIsPaid: <%= imports[i].isPaid %>
+                                                    </p>
+                                                    <p>UserName: <%= imports[i].providerId.name %>
+                                                    </p>
+                                                    <div class="select-box">
+                                                        <a class="confirm"
+                                                            href="/admin/import/deleteImport/<%= imports[i]._id %>">Yes</a>
+                                                        <button class="cancel"
+                                                            onclick="hideConfirmBox('<%=i+1%>')">No</button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- body: end -->
+
+        </div>
+    </div>
+</div>
+<script>
+    function hideNotification_c() {
+        const notification = document.getElementById('successNotification');
+        notification.classList.add('hidden'); // Ẩn thông báo khi nhấn nút ×
+    };
+    function showConfirmBox(id) {
+        document.getElementById("confirmBox-" + id).style.display = "block";
+        document.getElementById("overlay-" + id).style.display = "block";
+    }
+
+    function hideConfirmBox(id) {
+        document.getElementById("confirmBox-" + id).style.display = "none";
+        document.getElementById("overlay-" + id).style.display = "none";
+    }
+</script>
+<style>
+    .img-product {
+        height: 100px;
+    }
+
+    .success-notification {
+        display: block;
+        background-color: #4caf50;
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 10px;
+        position: absolute;
+        top: 104px;
+        right: 30px;
+        width: 240px;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .success-notification button {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        position: absolute;
+        top: 9px;
+        right: 4px;
+    }
+
+    .confirm-box {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 20px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        width: 400px;
+        text-align: left;
+    }
+
+    .confirm-box .select-box {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .confirm-box .select-box a {
+        text-align: center;
+    }
+
+    .confirm-box p:first-child {
+        text-align: center;
+    }
+
+    .confirm-box button,
+    .confirm-box a {
+        display: inline-block;
+        border: none;
+        width: 56px;
+        padding: 8px;
+        border-radius: 8px;
+        margin: 0 12px;
+    }
+
+    .confirm-box .confirm {
+        background-color: red;
+        color: white;
+    }
+
+    .confirm-box .cancel {
+        background-color: grey;
+        color: white;
+    }
+
+    .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+</style>

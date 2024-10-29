@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Chat</title>
+    <style>
+        .chatForm {
+            display: flex;
+            flex-direction: column;
+            background-color: #f6f6f6;
+            width: 400px;
+            height: 600px;
+            border: 8px solid #a4a4a4;
+            border-radius: 8px;
+            position: absolute;
+            bottom: 84px;
+            right: 40px;
+            transition: all 0.5s linear;
+        }
+
+        #chat {
+            width: 100%;
+            height: 550px;
+            display: flex;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            flex-direction: column;
+        }
+
+        .messageForm {
+            width: 100%;
+            display: flex;
+        }
+
+        #message {
+            flex-grow: 1;
+            height: 48px;
+            font-size: 16px;
+            border: none;
+            outline: none;
+            padding: 0 12px;
+            background-color: #fff;
+        }
+
+        #sendBtn {
+            height: 48px;
+            font-size: 16px;
+            border: none;
+            padding: 0px 20px;
+            outline: none;
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        .side-message {
+            padding: 8px 12px;
+            margin: 12px;
+            max-width: 250px;
+            font-size: 18px;
+            word-wrap: break-word;
+            position: relative;
+            margin-top: 30px;
+        }
+
+        .right {
+            border-radius: 20px 20px 0px 20px;
+            align-self: flex-end;
+            background-color: #2d2d2d;
+            box-shadow: 2px 2px 4px #dcdcdc;
+            color: #f6f6f6;
+        }
+
+        .left {
+            border-radius: 20px 20px 20px 0px;
+            align-self: flex-start;
+            background-color: #fff;
+            box-shadow: -2px 2px 4px #dcdcdc;
+        }
+
+        .side-title {
+            font-size: 12px;
+        }
+
+        .right .side-title {
+            position: absolute;
+            top: -18px;
+            right: 14px;
+            color: #2d2d2d;
+        }
+
+        .left .side-title {
+            position: absolute;
+            top: -18px;
+            left: 14px;
+            color: #2d2d2d;
+        }
+
+        .v-divider {
+            height: 48px;
+            width: 2px;
+            background-color: #f6f6f6;
+        }
+        .chatButton{
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: #00eaff;
+            border-radius: 50%;
+            transition: all 0.5s linear;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="chatButton"></div>
+    <div class="chatForm hidden">
+        <div id="chat"></div>
+        <div class="messageForm">
+            <input type="text" id="message" placeholder="Nhập tin nhắn...">
+            <div class="v-divider"></div>
+            <button id="sendBtn">Gửi</button>
+        </div>
+    </div> 
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const chat = document.getElementById('chat');
+        const messageInput = document.getElementById('message');
+        const sendBtn = document.getElementById('sendBtn');
+        const chatButton = document.querySelector('.chatButton');
+        const chatForm = document.querySelector('.chatForm');
+
+        chatButton.addEventListener('click', () => {
+            chatForm.classList.toggle('hidden');
+            if (chatForm.classList.contains('hidden')) {
+                chatButton.style.backgroundColor = '#ce208b';
+            } else {
+                chatButton.style.backgroundColor = '#00eaff';
+            }
+        })
+        // Đăng ký tên người dùng (username) ngay khi kết nối
+        const username = prompt("Nhập tên của bạn:");
+        socket.emit('registerClient', username);
+
+        // lấy lịch sử đoạn chat
+        socket.emit('getChatHistory', username);
+        socket.on('chatHistory', (history) => {
+            chat.innerHTML = '';
+            history.forEach(message => {
+                append(message.user, message.text, message.user === 'Admin' ? 'left' : 'right');
+            });
+        });
+        // Nhận tất cả tin nhắn từ server
+        socket.on('newMessage', (message) => {
+            append(message.user, message.text, 'left')
+        });
+        // Gửi tin nhắn từ client
+        sendBtn.addEventListener('click', () => {
+            const message = messageInput.value;
+            if (message) {
+                socket.emit('clientMessage', message, username);
+                messageInput.value = '';
+                append(username, message, 'right')
+            }
+        });
+        function append(user, message, side) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('side-message');
+            messageDiv.classList.add(`${side}`);
+            // Tạo phần tử p cho tiêu đề
+            const title = document.createElement('div');
+            title.classList.add('side-title');
+            title.textContent = `${user}`;
+            // Tạo phần tử p cho nội dung
+            const content = document.createElement('span');
+            content.classList.add('side-content');
+            content.textContent = `${message}`;
+            // Thêm tiêu đề và nội dung vào div
+            messageDiv.appendChild(title);
+            messageDiv.appendChild(content);
+            // Thêm div vào hộp chat
+            const chat = document.getElementById('chat');
+            chat.appendChild(messageDiv);
+        }
+    </script>
+</body>
+
+</html>
+
