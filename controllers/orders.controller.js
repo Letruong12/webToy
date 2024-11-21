@@ -118,3 +118,16 @@ exports.deleteOrder = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+exports.updateStatus = async (req, res) => {
+    try {
+        const updateStatus = await Order.findByIdAndUpdate(req.params.id, {
+            status: "Completed"
+        }, { new: true });
+        if (!updateStatus)
+            res.status(404).json({ status: 404, message: "not found" });
+        res.redirect('/admin/order/getAllOrders');
+    } catch (error) {
+        console.log(error);
+    }
+}

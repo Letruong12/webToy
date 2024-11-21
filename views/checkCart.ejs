@@ -78,6 +78,7 @@
                             </td>
                         </tr>
                         <input type="text" name="productIds" value="<%= cart[i]._id %>" style="display: none;">
+                        <input type="text" name="quantities" value="<%= cart[i].quantity %>" style="display: none;">
                     <% } %>
 
                 </table>
@@ -95,6 +96,7 @@
                     </div>
                 </div>
             </div>
+            <input type="text" name="userId" value="<%= userId %>" style="display: none;">
         </div>
     </form>
 </main>

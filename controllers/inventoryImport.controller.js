@@ -113,3 +113,16 @@ exports.deleteImport = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+exports.updateStatus = async (req, res) => {
+    try {
+        const updateStatus = await InventoryImport.findByIdAndUpdate(req.params.id, {
+            status: "Completed"
+        }, { new: true });
+        if (!updateStatus)
+            res.status(404).json({ status: 404, message: "not found" });
+        res.redirect('/admin/import/getAllImports');
+    } catch (error) {
+        console.log(error);
+    }
+}

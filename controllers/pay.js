@@ -4,6 +4,9 @@ const CryptoJS = require('crypto-js'); // npm install crypto-js
 const { v1: uuidv1 } = require('uuid'); // npm install uuid
 const moment = require('moment'); // npm install moment
 const qs = require('qs');
+const Order = require('../models/orders.model');
+const OrderDetail = require('../models/orderDetail.model');
+const Product = require('../models/products.model');
 
 // APP INFO
 const config = {
@@ -12,16 +15,21 @@ const config = {
     key2: 'kLtgPl8HHhfvMuDHPwKfgfsY4Ydm9eIz',
     endpoint: 'https://sb-openapi.zalopay.vn/v2/create',
 };
+let globaluserId;
 
 exports.payment = async (req, res) => {
-    const { productIds, totals } = req.body;
-    console.log(productIds, totals);
+    const { productIds, totals, userId, quantities } = req.body;
+    console.log(productIds, totals, userId, quantities);
+    globaluserId = userId;
     const embed_data = {
         //sau khi hoàn tất thanh toán sẽ đi vào link này (thường là link web thanh toán thành công của mình)
-        redirecturl: 'localhost:3000/cart',
+        redirecturl: 'https://e8cf-113-185-50-159.ngrok-free.app/cart?status=clear',
     };
 
-    const items = [];
+    const items = [
+        productIds,
+        quantities
+    ];
     const transID = Math.floor(Math.random() * 1000000);
 
     const order = {
@@ -34,7 +42,7 @@ exports.payment = async (req, res) => {
         amount: totals * 1000,
         //khi thanh toán xong, zalopay server sẽ POST đến url này để thông báo cho server của mình
         //Chú ý: cần dùng ngrok để public url thì Zalopay Server mới call đến được
-        callback_url: 'https://3293-2405-4802-555-f5d0-988f-42c3-7802-33ee.ngrok-free.app/callback',
+        callback_url: 'https://e8cf-113-185-50-159.ngrok-free.app/callback',
         description: `Lazada - Payment for the order #${transID}`,
         bank_code: '',
     };
@@ -83,8 +91,12 @@ exports.callBack = async (req, res) => {
         } else {
             // thanh toán thành công
             // merchant cập nhật trạng thái cho đơn hàng ở đây
-            
             let dataJson = JSON.parse(dataStr, config.key2);
+            const amount = dataJson.amount;
+            const items = JSON.parse(dataJson.item);
+            updateOrder(globaluserId, amount, items);
+            res.clearCookie('cart');
+            //
             console.log(
                 "update order's status = success where app_trans_id =",
                 dataJson['app_trans_id'],
@@ -129,6 +141,45 @@ exports.cherckStatusOrder = async (req, res) => {
         return res.status(200).json(result.data);
     } catch (error) {
         console.log('lỗi');
+        console.log(error);
+    }
+}
+
+async function updateOrder(userId, amount, items) {
+    try {
+        console.log('updateOrder');
+        console.log(userId, amount, items);
+        const productIds = items[0];
+        const quantities = items[1];
+        console.log(productIds, quantities);
+
+        // create order
+        const newOrder = new Order({
+            status: "Pending",
+            isPaid: true,
+            userId: userId
+        });
+        await newOrder.save();
+
+        // create orderDetails
+        const products = await Product.find({ _id: { $in: productIds } });
+        for (let i = 0; i < products.length; i++){
+            
+            const newOrderDetail = new OrderDetail({
+                quantity: quantities[i],
+                orderId: newOrder._id,
+                productId: products[i]._id
+            });
+            await newOrderDetail.save();
+            const newQuantity = products[i].quantity - newOrderDetail.quantity;
+            console.log('old: ', products[i].quantity, ' new: ', newQuantity);
+            const updateProduct = await Product.findByIdAndUpdate(productIds[i]._id, {
+                $set: {
+                    quantity: newQuantity
+                }
+            }, { new: true });
+        }
+    } catch (error) {
         console.log(error);
     }
 }

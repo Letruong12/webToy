@@ -104,6 +104,12 @@
                                                             onclick="hideConfirmBox('<%=i+1%>')">No</button>
                                                     </div>
                                                 </div>
+                                                <% if(imports[i].status=="Pending" ) { %>
+                                                    <a href="/admin/import/updateStatus/<%= imports[i]._id %>" class="btn btn-danger" style="margin-left: 2rem;">status
+                                                        ok</a>
+                                                <% } else { %>
+                                                    <button class="btn btn-danger" style="margin-left: 2rem;" disabled>status ok</button>
+                                                <% } %>
                                             </td>
                                         </tr>
                                     <% } %>

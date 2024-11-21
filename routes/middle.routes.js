@@ -53,7 +53,7 @@ router.get('/dashboard', authenticateToken, authorizeRoles('normal', 'admin'), a
     }
     
 });
-router.get('/detail/:id', async (req, res) => {
+router.get('/detail/:id', authenticateToken, authorizeRoles('normal', 'admin'), async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
 
@@ -67,10 +67,10 @@ router.get('/detail/:id', async (req, res) => {
     }
 });
 const Cart = require('../controllers/cart');
-router.get('/cart', Cart.getCart);
-router.get('/cart/remove/:id', Cart.removeCart);
-router.get('/cart/add/:id', Cart.addCart);
-router.post('/cart/checkout', Cart.checkCart);
+router.get('/cart', authenticateToken, authorizeRoles('normal', 'admin'), Cart.getCart);
+router.get('/cart/remove/:id', authenticateToken, authorizeRoles('normal', 'admin'), Cart.removeCart);
+router.get('/cart/add/:id', authenticateToken, authorizeRoles('normal', 'admin'), Cart.addCart);
+router.post('/cart/checkout', authenticateToken, authorizeRoles('normal', 'admin'), Cart.checkCart);
 
 router.get('/profile', async (req, res) => {
     res.status(201).render('layout', {

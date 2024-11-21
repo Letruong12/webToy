@@ -155,6 +155,11 @@
         <!-- Latest Products Section -->
         <section class="latest-products">
             <h2 class="mb-4">LATEST PRODUCTS</h2>
+            <% if( !user ) { %>
+                <div>khong co user</div>
+            <%} else { %>
+                <div><%= user.name %></div>
+            <%}%>
             <div class="row">
                 <!-- Product Card -->
                 <% for(var i = 0; i < products.length; i++) { %>
@@ -189,6 +194,7 @@
             <button id="sendBtn">Gửi</button>
         </div>
     </div>
+    
 
     <script src="/socket.io/socket.io.js"></script>
     <script>

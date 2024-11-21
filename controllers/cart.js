@@ -1,11 +1,19 @@
 const Product = require('../models/products.model');
+const User = require('../models/users.model');
 
 exports.getCart = (req, res) => {
-    const cart = JSON.parse(req.cookies.cart || '[]');
+    let cart = JSON.parse(req.cookies.cart || '[]');
     console.log(cart);
-    const totals = cart.reduce((total, item) => {
+    let totals = cart.reduce((total, item) => {
         return total + item.price * item.quantity;
     }, 0);
+    check = req.query.status;
+    if (check) {
+        res.cookie('cart', JSON.stringify([]), { maxAge: 24 * 60 * 60 * 1000 });
+        cart = [];
+        totals = 0;
+    }
+    console.log(cart, totals);
     res.status(201).render('layout', {
         title: 'cart',
         body: 'cart',
@@ -57,21 +65,26 @@ exports.addCart = async (req, res) => {
 }
 
 exports.checkCart = async (req, res) => {
-    const cart = JSON.parse(req.cookies.cart || '[]');
-    const selectedItemIds = req.body.selectedItems || [];
-    const selectedItems = cart.filter(item => selectedItemIds.includes(item._id));
+    try {
+        const cart = JSON.parse(req.cookies.cart || '[]');
+        const selectedItemIds = req.body.selectedItems || [];
+        const selectedItems = cart.filter(item => selectedItemIds.includes(item._id));
 
-    if (selectedItems.length > 0) {
-        const totals = selectedItems.reduce((total, item) => {
-            return total + item.price * item.quantity;
-        }, 0);
-        res.status(201).render('layout', {
-            body: 'checkCart',
-            title: 'Checkout',
-            cart: selectedItems,
-            totals: totals
-        });
-    } else {
-        res.send('No items selected.');
+        if (selectedItems.length > 0) {
+            const totals = selectedItems.reduce((total, item) => {
+                return total + item.price * item.quantity;
+            }, 0);
+            res.status(201).render('layout', {
+                body: 'checkCart',
+                title: 'Checkout',
+                cart: selectedItems,
+                totals: totals,
+                userId: req.user.userId
+            });
+        } else {
+            res.send('No items selected.');
+        }
+    } catch (error) {
+        console.log(error);
     }
 }

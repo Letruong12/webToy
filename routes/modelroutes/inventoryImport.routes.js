@@ -39,4 +39,6 @@ router.get('/updateImport/:id', async (req, res) => {
     }
 })
 
+router.get('/updateStatus/:id', importController.updateStatus);
+
 module.exports = router;

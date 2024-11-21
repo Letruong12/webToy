@@ -40,4 +40,6 @@ router.get('/updateOrder/:id', async (req, res) => {
     }
 });
 
+router.get('/updateStatus/:id', orderController.updateStatus);
+
 module.exports = router;
