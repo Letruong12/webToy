@@ -27,10 +27,14 @@ exports.signUp = async (req, res) => {
         // 3: Ma hoa password
         const hashedPassword = await bcryptjs.hash(req.body.password, 10);
 
+        // bonus: thêm role
+        const role = await Role.findOne({ name: "normal" });
+
         // 4: khoi tao user trong db
         const user = await User.create({
             ...req.body,
-            password: hashedPassword
+            password: hashedPassword,
+            idRole: role.id
         })
         // 5: thong bao cho nguoi dung dang ky thanh cong
         user.password = undefined;
@@ -59,14 +63,14 @@ exports.login = async (req, res) => {
     const role = await Role.findOne({ _id: user.idRole });
     console.log(user, role);
     
-    if (!user || user.password != password || role.name != key_role) {
-        return res.status(401).json({ message: "Thông tin xác thực không hợp lê!" });
-    }
-
-    // const isPasswordValid = await bcryptjs.compare(password, user.password);
-    // if (!user || !isPasswordValid) {
-    //     return res.status(401).json({ message: "Thông tin xác thực không hợp lệ!" });
+    // if (!user || user.password != password || role.name != key_role) {
+    //     return res.status(401).json({ message: "Thông tin xác thực không hợp lê!" });
     // }
+
+    const isPasswordValid = await bcryptjs.compare(password, user.password);
+    if (!user || !isPasswordValid || role.name != key_role) {
+        return res.status(401).json({ message: "Thông tin xác thực không hợp lệ!" });
+    }
     const token = jsonwebtoken.sign({ userId: user._id, role: role.name }, SECRET_CODE, { expiresIn: '2h' });
     res.cookie('authToken', token, {
         httpOnly: true, 
@@ -79,6 +83,7 @@ exports.login = async (req, res) => {
         return res.status(201).redirect('/admin/dashboard');
 }
 
+// chua dung den
 exports.loginAdmin = async (req, res, next) => {
     console.log('vao login -  pass!');
     const { email, password, key_role } = req.body;

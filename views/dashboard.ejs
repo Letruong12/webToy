@@ -14,7 +14,7 @@
             height: 600px;
             border: 8px solid #a4a4a4;
             border-radius: 8px;
-            position: absolute;
+            position: fixed;
             bottom: 84px;
             right: 40px;
             transition: all 0.5s linear;
@@ -150,9 +150,8 @@
 </head>
 
 <body>
-    <main class="container my-4">   
+    <!-- <main class="container my-4">   
     
-        <!-- Latest Products Section -->
         <section class="latest-products">
             <h2 class="mb-4">LATEST PRODUCTS</h2>
             <% if( !user ) { %>
@@ -160,31 +159,377 @@
             <%} else { %>
                 <div><%= user.name %></div>
             <%}%>
+        </section>
+    </main> -->
+
+    <!-- MAIN-CONTENT-SECTION START -->
+    <section class="main-content-section">
+        <div class="container">
             <div class="row">
-                <!-- Product Card -->
-                <% for(var i = 0; i < products.length; i++) { %>
-                    <div class="col-md-4 col-lg-3 mb-4">
-                        <div class="card">
-                            <a href="/detail/<%= products[i]._id %>">
-                                <img src="<%= products[i].image %>" class="card-img-top card-img" alt="Airpods">
-                            </a>
-                            <div class="card-body text-center">
-                                <h5 class="card-title">
-                                    <a href="/detail/<%= products[i]._id %>" class="link-a"><%= products[i].name %></a>
-                                </h5>
-                                <div class="rating mb-2">
-                                    <span class="ml-2">0 reviews</span>
+                <!-- MAIN-SLIDER-AREA START -->
+                <div class="main-slider-area">
+                    <!-- SLIDER-AREA START -->
+                    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                        <div class="slider-area">
+                            <div id="wrapper">
+                                <div class="slider-wrapper">
+                                    <div id="mainSlider" class="nivoSlider" style="height: 420px;">
+                                        <img src="img/slider/2.jpg" alt="main slider" title="#htmlcaption" style="height: 420px;"/>
+                                        <img src="img/slider/1.jpg" alt="main slider" title="#htmlcaption2" style="height: 420px;"/>
+                                    </div>
                                 </div>
-                                <p class="price h5">$ <%= products[i].price %></p>
                             </div>
                         </div>
                     </div>
-                <% } %>
-                
-                <!-- Add more product cards similarly -->
+                    <!-- SLIDER-AREA END -->
+                    <!-- SLIDER-RIGHT START -->
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                        <div class="slider-right zoom-img m-top" style="height: 420px;">
+                            <a href="#"><img class="img-responsive" src="img/slider/2.jpg" style="height: 420px;" alt="sidebar left" /></a>
+                        </div>
+                    </div>
+                    <!-- SLIDER-RIGHT END -->
+                </div>
+                <!-- MAIN-SLIDER-AREA END -->
             </div>
-        </section>
-    </main>
+    
+            <div class="row">
+                <!-- FEATURED-PRODUCTS-AREA START -->
+                <div class="featured-products-area">
+                    <div class="center-title-area">
+                        <h2 class="center-title">Featured Products</h2>
+                    </div>
+                    <div class="col-xs-12">
+                        <div class="row">
+                            <!-- FEARTURED-CAROUSEL START -->
+                            <div class="feartured-carousel">
+                                <!-- SINGLE-PRODUCT-ITEM START -->
+                                <% for(var i=0; i < products.length; i++) { %>
+                                    <div class="item">
+                                        <div class="single-product-item">
+                                            <div class="product-image">
+                                                <a href="/detail/<%= products[i]._id %>"><img src="<%= products[i].image %>" style="width: 204px; height: 204px;" alt="<%= products[i].name %>" /></a>
+                                                <a href="#" class="new-mark-box">new</a>
+                                                <div class="overlay-content">
+                                                    <ul>
+                                                        <li><a href="/detail/<%= products[i]._id %>" title="Quick view"><i class="fa fa-search"></i></a>
+                                                        </li>
+                                                        <li><a href="/cart/add/<%= products[i]._id %>" title="Quick view"><i class="fa fa-shopping-cart"></i></a></li>
+                                                        <li><a href="#" title="Quick view"><i class="fa fa-retweet"></i></a>
+                                                        </li>
+                                                        <li><a href="#" title="Quick view"><i class="fa fa-heart-o"></i></a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="product-info">
+                                                <a href="/detail/<%= products[i]._id %>"><%= products[i].name %></a>
+                                                <div class="price-box">
+                                                    <span class="price"><%= products[i].price %> 000 đ</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %>
+    
+                            </div>
+                            <!-- FEARTURED-CAROUSEL END -->
+                        </div>
+                    </div>
+                </div>
+                <!-- FEATURED-PRODUCTS-AREA END -->
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- TAB-BG-PRODUCT-AREA START -->
+                    <div class="tab-bg-product-area">
+                        <!-- TAB PANES START -->
+                        <div class="tab-content bg-tab-content">
+                            <!-- TABS ONE START-->
+                            <div role="tabpanel" class="tab-pane active" id="women-tab">
+                                <div class="bg-tab-content-area tab-carousel-1">
+                                    <!-- TAB-SINGLE-ITEM START -->
+                                    <% for(var i=0; i < products.length; i++) { %>
+                                        <div class="item">
+                                            <div class="single-product-item">
+                                                <div class="product-image">
+                                                    <a href="/detail/<%= products[i]._id %>"><img src="<%= products[i].image %>" alt="product-image" style="width: 250px; height: 250px;"/></a>
+                                                    <a href="#" class="new-mark-box">new</a>
+                                                    <div class="overlay-content">
+                                                        <ul>
+                                                            <li><a href="#" title="Quick view"><i class="fa fa-search"></i></a>
+                                                            </li>
+                                                            <li><a href="#" title="Quick view"><i
+                                                                        class="fa fa-shopping-cart"></i></a></li>
+                                                            <li><a href="#" title="Quick view"><i class="fa fa-retweet"></i></a>
+                                                            </li>
+                                                            <li><a href="#" title="Quick view"><i class="fa fa-heart-o"></i></a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="product-info">
+                                                    <a href="single-product.html"><%= products[i].name %></a>
+                                                    <div class="price-box">
+                                                        <span class="price"><%= products[i].price %> 000 đ</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <!-- TABS ONE END-->
+                        </div>
+                    </div>
+                    <!-- TAB-BG-PRODUCT-AREA END -->
+                </div>
+            </div>
+            <div class="row">
+                <!-- IMAGE-ADD-AREA START -->
+                <div class="image-add-area">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <!-- ONEHALF-ADD START -->
+                        <div class="onehalf-add-shope zoom-img">
+                            <a href="#"><img src="img/slider/2.jpg" style="width: 100%; height: 350px;" alt="shope-add" /></a>
+                        </div>
+                        <!-- ONEHALF-ADD END -->
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <!-- ONEHALF-ADD START -->
+                        <div class="onehalf-add-shope zoom-img">
+                            <a href="#"><img src="img/slider/3.jpg" style="width: 100%; height: 350px;" alt="shope-add" /></a>
+                        </div>
+                        <!-- ONEHALF-ADD END -->
+                    </div>
+                </div>
+                <!-- IMAGE-ADD-AREA END -->
+            </div>
+        </div>
+    </section>
+    <!-- MAIN-CONTENT-SECTION END -->
+
+    <!-- BRAND-CLIENT-AREA START -->
+    <section class="brand-client-area">
+        <div class="container">
+            <div class="row">
+                <!-- BRAND-CLIENT-ROW START -->
+                <div class="brand-client-row">
+                    <div class="center-title-area">
+                        <h2 class="center-title">BRAND & CLIENTS</h2>
+                    </div>
+                    <div class="col-xs-12">
+                        <div class="row">
+                            <!-- CLIENT-CAROUSEL START -->
+                            <div class="client-carousel">
+                                <!-- CLIENT-SINGLE START -->
+                                <div class="item">
+                                    <div class="single-client">
+                                        <a href="#">
+                                            <img src="img/brand/1.png" alt="brand-client" />
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- CLIENT-SINGLE END -->
+                                <!-- CLIENT-SINGLE START -->
+                                <div class="item">
+                                    <div class="single-client">
+                                        <a href="#">
+                                            <img src="img/brand/2.png" alt="brand-client" />
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- CLIENT-SINGLE END -->
+                                <!-- CLIENT-SINGLE START -->
+                                <div class="item">
+                                    <div class="single-client">
+                                        <a href="#">
+                                            <img src="img/brand/3.png" alt="brand-client" />
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- CLIENT-SINGLE END -->
+                                <!-- CLIENT-SINGLE START -->
+                                <div class="item">
+                                    <div class="single-client">
+                                        <a href="#">
+                                            <img src="img/brand/4.png" alt="brand-client" />
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- CLIENT-SINGLE END -->
+                                <!-- CLIENT-SINGLE START -->
+                                <div class="item">
+                                    <div class="single-client">
+                                        <a href="#">
+                                            <img src="img/brand/5.png" alt="brand-client" />
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- CLIENT-SINGLE END -->
+                                <!-- CLIENT-SINGLE START -->
+                                <div class="item">
+                                    <div class="single-client">
+                                        <a href="#">
+                                            <img src="img/brand/1.png" alt="brand-client" />
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- CLIENT-SINGLE END -->
+                                <!-- CLIENT-SINGLE START -->
+                                <div class="item">
+                                    <div class="single-client">
+                                        <a href="#">
+                                            <img src="img/brand/3.png" alt="brand-client" />
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- CLIENT-SINGLE END -->
+                                <!-- CLIENT-SINGLE START -->
+                                <div class="item">
+                                    <div class="single-client">
+                                        <a href="#">
+                                            <img src="img/brand/2.png" alt="brand-client" />
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- CLIENT-SINGLE END -->
+                                <!-- CLIENT-SINGLE START -->
+                                <div class="item">
+                                    <div class="single-client">
+                                        <a href="#">
+                                            <img src="img/brand/3.png" alt="brand-client" />
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- CLIENT-SINGLE END -->
+                                <!-- CLIENT-SINGLE START -->
+                                <div class="item">
+                                    <div class="single-client">
+                                        <a href="#">
+                                            <img src="img/brand/4.png" alt="brand-client" />
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- CLIENT-SINGLE END -->
+                                <!-- CLIENT-SINGLE START -->
+                                <div class="item">
+                                    <div class="single-client">
+                                        <a href="#">
+                                            <img src="img/brand/5.png" alt="brand-client" />
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- CLIENT-SINGLE END -->
+                                <!-- CLIENT-SINGLE START -->
+                                <div class="item">
+                                    <div class="single-client">
+                                        <a href="#">
+                                            <img src="img/brand/1.png" alt="brand-client" />
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- CLIENT-SINGLE END -->
+                                <!-- CLIENT-SINGLE START -->
+                                <div class="item">
+                                    <div class="single-client">
+                                        <a href="#">
+                                            <img src="img/brand/3.png" alt="brand-client" />
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- CLIENT-SINGLE END -->
+                                <!-- CLIENT-SINGLE START -->
+                                <div class="item">
+                                    <div class="single-client">
+                                        <a href="#">
+                                            <img src="img/brand/4.png" alt="brand-client" />
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- CLIENT-SINGLE END -->
+                                <!-- CLIENT-SINGLE START -->
+                                <div class="item">
+                                    <div class="single-client">
+                                        <a href="#">
+                                            <img src="img/brand/5.png" alt="brand-client" />
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- CLIENT-SINGLE END -->
+                            </div>
+                            <!-- CLIENT-CAROUSEL END -->
+                        </div>
+                    </div>
+                </div>
+                <!-- BRAND-CLIENT-ROW END -->
+            </div>
+        </div>
+    </section>
+    <!-- BRAND-CLIENT-AREA END -->
+    <!-- COMPANY-FACALITY START -->
+    <section class="company-facality">
+        <div class="container">
+            <div class="row">
+                <div class="company-facality-row">
+                    <!-- SINGLE-FACALITY START -->
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                        <div class="single-facality">
+                            <div class="facality-icon">
+                                <i class="fa fa-rocket"></i>
+                            </div>
+                            <div class="facality-text">
+                                <h3 class="facality-heading-text">FREE SHIPPING</h3>
+                                <span>on order over $100</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- SINGLE-FACALITY END -->
+                    <!-- SINGLE-FACALITY START -->
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                        <div class="single-facality">
+                            <div class="facality-icon">
+                                <i class="fa fa-umbrella"></i>
+                            </div>
+                            <div class="facality-text">
+                                <h3 class="facality-heading-text">24/7 SUPPORT</h3>
+                                <span>online consultations</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- SINGLE-FACALITY END -->
+                    <!-- SINGLE-FACALITY START -->
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                        <div class="single-facality">
+                            <div class="facality-icon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <div class="facality-text">
+                                <h3 class="facality-heading-text">DAILY UPDATES</h3>
+                                <span>Check out store for latest</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- SINGLE-FACALITY END -->
+                    <!-- SINGLE-FACALITY START -->
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                        <div class="single-facality">
+                            <div class="facality-icon">
+                                <i class="fa fa-refresh"></i>
+                            </div>
+                            <div class="facality-text">
+                                <h3 class="facality-heading-text">30-DAY RETURNS</h3>
+                                <span>moneyback guarantee</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- SINGLE-FACALITY END -->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- COMPANY-FACALITY END -->
+
     <div class="chatButton"></div>
     <div class="chatForm hidden">
         <div id="chat"></div>
@@ -194,7 +539,37 @@
             <button id="sendBtn">Gửi</button>
         </div>
     </div>
+    <!-- FOOTER-TOP-AREA END -->
+    <!-- JS 
+        		===============================================-->
+    <!-- jquery js -->
+    <script src="js/vendor/jquery-1.11.3.min.js"></script>
     
+    <!-- meanmenu js -->
+    <script src="js/jquery.meanmenu.js"></script>
+    
+    <!-- owl carousel js -->
+    <script src="js/owl.carousel.min.js"></script>
+    
+    <!-- nivo slider js -->
+    <script src="js/jquery.nivo.slider.js"></script>
+    
+    <!-- jqueryui js -->
+    <script src="js/jqueryui.js"></script>
+    
+    <!-- bootstrap js -->
+    <script src="js/bootstrap.min.js"></script>
+    
+    <!-- wow js -->
+    <script src="js/wow.js"></script>
+    <script>
+        new WOW().init();
+    </script>
+    <script src="js/main.js"></script>
+
+    <!-- MODERNIZR JS 
+        		============================================ -->
+    <script src="js/vendor/modernizr-2.6.2.min.js"></script>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>

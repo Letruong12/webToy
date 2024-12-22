@@ -3,6 +3,8 @@ const router = express.Router();
 // model routes
 const User = require('../models/users.model');
 const Product = require('../models/products.model');
+const Order = require('../models/orders.model');
+const OrderDetail = require('../models/orderDetail.model');
 
 const adminRouter = require('./admin.routes');
 const { authenticateToken, login, signUp, loginAdmin } = require('../middleware/auth');
@@ -72,10 +74,36 @@ router.get('/cart/remove/:id', authenticateToken, authorizeRoles('normal', 'admi
 router.get('/cart/add/:id', authenticateToken, authorizeRoles('normal', 'admin'), Cart.addCart);
 router.post('/cart/checkout', authenticateToken, authorizeRoles('normal', 'admin'), Cart.checkCart);
 
-router.get('/profile', async (req, res) => {
+router.get('/profile', authenticateToken, authorizeRoles('normal', 'admin'), async (req, res) => {
+    const user = await User.findById(req.user.userId);
+    const orders = await Order.find({ userId: req.user.userId });
+    const orderWithTotal = await Promise.all(
+        orders.map(async (order) => {
+            try {
+                const orderDetails = await OrderDetail.find({ orderId: order._id }).populate('productId');
+                const total = orderDetails.reduce((total, detail) => {
+                    return total + (detail.quantity * detail.productId.price);
+                }, 0);
+                return {
+                    ...order._doc,
+                    totalAmount: total
+                }
+            } catch (error) {
+                console.log(`Error calculating total for order ID ${order._id}: `, error.message);
+                return {
+                    ...order._doc,
+                    totalAmount: 0,
+                    errorMessage: 'Error calculating total'
+                }
+            }
+        })
+    );
+    const ordersUser = await Order.find({ userId: req.user.userId });
     res.status(201).render('layout', {
         title: 'profile',
         body: 'profile',
+        user: user,
+        orders: orderWithTotal
     });
 });
 
@@ -83,7 +111,8 @@ router.get('/profile', async (req, res) => {
 router.get('/logout', (req, res) => {
     res.cookie('authToken', '', { maxAge: 0 });
     res.cookie('cart', '', { maxAge: 0 });
-    res.status(200).json({ message: 'Đã đăng xuất thành công!' });
+    res.redirect('/auth')
+    
 });
 router.get('/logoutAdmin', (req, res) => {
     res.cookie('authToken', '', { maxAge: 0 });

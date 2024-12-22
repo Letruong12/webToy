@@ -32,83 +32,116 @@ footer {
     background-color: #333;
     color: #fff;
 }
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
 
-td, th {
-  border: 1px solid #393c49b0;
-  text-align: left;
-  padding: 8px;
-}
-
-tr:nth-child(even) {
-  background-color: #dddddd;
-}
 </style>
-<!-- Shopping Cart Section -->
-<main class="container my-5">
-    <h2 class="text-center mb-5">SHOPPING CART</h2>
-    <form action="/cart/checkout" method="post">
+
+<section class="main-content-section" style="margin: 20px 0 0 0;">
+    <div class="container">
         <div class="row">
-            <!-- Cart Items -->
-            <div class="col-md-8">
-                <table>
-                    <tr>
-                        <th>name</th>
-                        <th>price</th>
-                        <th>image</th>
-                        <th>quantity</th>
-                        <th>selection</th>
-                        <th></th>
-                    </tr>
-                    <% for( var i=0; i < cart.length; i++) { %>
-                        <tr>
-                            <td>
-                                <%= cart[i].name %>
-                            </td>
-                            <td>
-                                <%= cart[i].price %>
-                            </td>
-                            <td><img src="<%= cart[i].image %>" alt="error" style="height: 100px;"></td>
-                            <td>
-                                <%= cart[i].quantity %>
-                            </td>
-                            <td>
-                                <input 
-                                    type="checkbox" 
-                                    name="selectedItems" 
-                                    value="<%= cart[i]._id %>"
-                                    class="item-checkbox"
-                                >
-                            </td>
-                            <td>
-                                <a href="/cart/remove/<%= cart[i]._id %>" style="color: red; text-decoration: none;">remove</a>
-                                /
-                                <a href="/detail/<%= cart[i]._id %>">view</a>
-                            </td>
-                        </tr>
-                        <% } %>
-        
-                </table>
-            </div>
-        
-            <!-- Subtotal Section -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">SUBTOTAL (<%= cart.length %> ITEM)</h5>
-                        <p class="h4">$ <%= totals %>
-                        </p>
-                        <button type="submit" class="btn btn-dark btn-block mt-3">PROCEED TO CHECKOUT</button>
-                    </div>
+            <!-- Mở form -->
+            <form action="/cart/checkout" method="post">
+                <!-- CART TABLE_BLOCK START -->
+                <div class="table-responsive">
+                    <!-- TABLE START -->
+                    <table class="table table-bordered" id="cart-summary">
+                        <thead>
+                            <tr>
+                                <th class="cart-product">Product</th>
+                                <th class="cart-description">Name</th>
+                                <th class="cart-avail text-center">Availability</th>
+                                <th class="cart-unit text-right">Unit price</th>
+                                <th class="cart_quantity text-center">Qty</th>
+                                <th class="cart-delete">&nbsp;</th>
+                                <th class="cart-total text-right">Total</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <!-- SINGLE CART_ITEM START -->
+                            <% for( var i=0; i < cart.length; i++) { %>
+                                <tr>
+                                    <td class="cart-product">
+                                        <a href="#"><img alt="Blouse" src="<%= cart[i].image %>"></a>
+                                    </td>
+                                    <td class="cart-description">
+                                        <p class="product-name"><a href="#">
+                                                <%= cart[i].name %>
+                                            </a></p>
+                                    </td>
+                                    <td class="cart-avail"><span class="label label-success">In stock</span></td>
+                                    <td class="cart-unit">
+                                        <ul class="price text-right">
+                                            <li class="price"><%= cart[i].price %> 000 đ
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    <td class="cart_quantity text-center">
+                                        <div class="cart-plus-minus-button">
+                                            <input class="cart-plus-minus" type="text" name="qtybutton"
+                                                value="<%= cart[i].quantity %>">
+                                        </div>
+                                    </td>
+                                    <td class="cart-delete text-center">
+                                        <span>
+                                            <a href="/cart/remove/<%= cart[i]._id %>"
+                                                style="color: red; text-decoration: none;">remove</a>
+                                            /
+                                            <a href="/detail/<%= cart[i]._id %>">view</a>
+                                            /
+                                            <input type="checkbox" name="selectedItems" value="<%= cart[i]._id %>"
+                                                class="item-checkbox">
+                                        </span>
+                                    </td>
+                                    <td class="cart-total">
+                                        <span class="price"><%= cart[i].price * cart[i].quantity %> 000 đ</span>
+                                    </td>
+                                </tr>
+                                <% } %>
+                        </tbody>
+
+                        <tfoot>
+                            <tr class="cart-total-price">
+                                <td class="cart_voucher" colspan="3" rowspan="4"></td>
+                                <td class="text-right" colspan="3">Total products (tax excl.)</td>
+                                <td id="total_product" class="price" colspan="1"><%= totals %> 000 đ
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-right" colspan="3">Total shipping</td>
+                                <td id="total_shipping" class="price" colspan="1">5 000 đ</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right" colspan="3">Total vouchers (tax excl.)</td>
+                                <td class="price" colspan="1">0 đ</td>
+                            </tr>
+                            <tr>
+                                <td class="total-price-container text-right" colspan="3">
+                                    <span>Total</span>
+                                </td>
+                                <td id="total-price-container" class="price" colspan="1">
+                                    <span id="total-price"><%= totals + 5 %> 000 đ</span>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <!-- TABLE END -->
                 </div>
-            </div>
+                <!-- CART TABLE_BLOCK END -->
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <!-- RETURNE-CONTINUE-SHOP START -->
+                    <div class="returne-continue-shop" style="display: flex; justify-content: space-between;">
+                        <a href="/dashboard" class="continueshoping"><i class="fa fa-chevron-left"></i>Continue
+                            shopping</a>
+                        <button type="submit" class="btn" style="background-color: #ff4f4f; color: #fff;">Proceed to
+                            checkout<i class="fa fa-chevron-right"></i></button>
+                    </div>
+                    <!-- RETURNE-CONTINUE-SHOP END -->
+                </div>
+            </form> <!-- Đóng form đúng vị trí -->
         </div>
-    </form>
-</main>
+    </div>
+</section>
 <script>
     document.querySelectorAll('.item-checkbox').forEach(checkbox => {
         // Lấy trạng thái từ localStorage nếu có

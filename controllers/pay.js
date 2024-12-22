@@ -39,7 +39,7 @@ exports.payment = async (req, res) => {
         app_time: Date.now(), // miliseconds
         item: JSON.stringify(items),
         embed_data: JSON.stringify(embed_data),
-        amount: totals * 1000,
+        amount: (totals + 5) * 1000,
         //khi thanh toán xong, zalopay server sẽ POST đến url này để thông báo cho server của mình
         //Chú ý: cần dùng ngrok để public url thì Zalopay Server mới call đến được
         callback_url: 'https://e8cf-113-185-50-159.ngrok-free.app/callback',

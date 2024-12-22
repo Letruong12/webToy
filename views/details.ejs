@@ -1,5 +1,5 @@
 <main class="container my-4">
-    <a href="/dashboard" class="text-secondary d-block mb-3">GO BACK</a>
+    <a href="/dashboard" class="text-secondary d-block mb-3 btn" style="border: 1px solid #f0f0f0; margin: 20px 0;">GO BACK</a>
     <div class="row">
         <!-- Product Image -->
         <div class="col-md-6">
@@ -15,7 +15,7 @@
             <p class="price h4">$ <%= product.price %></p>
             <p class="description">Description: <%= product.description %></p>
             <div class="purchase-info p-3 bg-light border">
-                <p class="mb-1">Price: $ <%= product.price %></p>
+                <p class="mb-1">Price: <%= product.price %> 000 đ</p>
                 <% if(product.quantity > 0) { %>
                     <p class="mb-2">Status: In stock</p>
                 <% } else { %>

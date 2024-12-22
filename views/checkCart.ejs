@@ -36,6 +36,7 @@
         font-family: arial, sans-serif;
         border-collapse: collapse;
         width: 100%;
+        margin-bottom: 20px;
     }
 
     td,
@@ -51,8 +52,8 @@
 </style>
 <!-- Shopping Cart Section -->
 <main class="container my-5">
-    <h2 class="text-center mb-5">CHECK CART</h2>
-    <a href="/cart" class="text-secondary d-block mb-3">GO BACK</a>
+    <h2 class="text-center mb-5" style="margin: 20px 0 0 0;">CHECK CART</h2>
+    <a href="/cart" class="text-secondary d-block mb-3 btn" style="border: 1px solid #f0f0f0; margin: 20px 0;">GO BACK</a>
     <form action="/payment" method="post">
         <div class="row">
             <!-- Cart Items -->
@@ -89,7 +90,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">SUBTOTAL (<%= cart.length %> ITEM)</h5>
-                        <p class="h4">$ <%= totals %>
+                        <p class="h4">$ <%= totals + 5  %>
                         </p>
                         <input type="text" name="totals" value="<%= totals %>" style="display: none;">
                         <button type="submit" class="btn btn-dark btn-block mt-3">buy</button>

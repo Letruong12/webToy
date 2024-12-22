@@ -1,1 +1,71 @@
-<div><%= title %></div>
+<section class="my-account-section" style="margin: 20px 0 0 0;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                <h2>My Account</h2>
+                <div class="account-details">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="2">User Information</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Name:</strong></td>
+                                <td>
+                                    <%= user.name %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Email:</strong></td>
+                                <td>
+                                    <%= user.email %>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="2">Order</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    #
+                                </td>
+                                <td>
+                                    Status
+                                </td>
+                                <td>
+                                    IsPaid
+                                </td>
+                                <td>
+                                    Total
+                                </td>
+                            </tr>
+                            <% for(var i = 0; i < orders.length; i++) { %>
+                                <tr>
+                                    <td><%= i + 1 %></td>
+                                    <td><%= orders[i].status %></td>
+                                    <td><%= orders[i].isPaid %></td>
+                                    <td><%= orders[i].totalAmount %> 000 đ</td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <h2>Actions</h2>
+                <div class="account-actions">
+                    <a href="/logout" class="btn btn-danger btn-block">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
